@@ -7,6 +7,10 @@ class Tweet < ApplicationRecord
     record_when_tweet_was_sent
   end
 
+  def self.last_sent
+    sent.order(tweeted_at: :desc).first
+  end
+
   private
 
   def twitter_client

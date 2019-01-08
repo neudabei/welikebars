@@ -46,6 +46,16 @@ RSpec.describe Tweet, type: :model do
     end
   end
 
+  describe '.last_sent' do
+      let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
+      let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: 1.day.ago, approved: true) }
+      let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: 2.days.ago, approved: true) }
+
+    it 'returns the tweet which was sent last' do
+      expect(Tweet.last_sent.id).to eq(tweet_three.id)
+    end
+  end
+
   describe '#send' do
     subject { described_class.first }
     let(:twitter_client) { double(:twitter_client) }
