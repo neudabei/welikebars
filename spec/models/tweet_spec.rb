@@ -37,6 +37,15 @@ RSpec.describe Tweet, type: :model do
     end
   end
 
+  describe 'sent scope' do
+    let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: nil, approved: true) }
+
+    it 'returns all tweets that have a tweeted_at timestamp' do
+      expect(Tweet.sent).to eq([tweet_one])
+    end
+  end
+
   describe '#send' do
     subject { described_class.first }
     let(:twitter_client) { double(:twitter_client) }

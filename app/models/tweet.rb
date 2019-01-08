@@ -1,5 +1,6 @@
 class Tweet < ApplicationRecord
   scope :tweetable, -> { where(tweeted_at: nil, approved: true) }
+  scope :sent, -> { where.not(tweeted_at: nil) }
 
   def send
     twitter_client.update(bar)
