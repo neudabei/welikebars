@@ -51,5 +51,10 @@ RSpec.describe Tweet, type: :model do
       expect(twitter_client).to receive(:update).with(Tweet.first.bar)
       subject.send
     end
+
+    it 'records when the tweet was sent' do
+      subject.send
+      expect(subject.tweeted_at).to be_within(1.second).of Time.now
+    end
   end
 end

@@ -3,6 +3,7 @@ class Tweet < ApplicationRecord
 
   def send
     twitter_client.update(bar)
+    record_when_tweet_was_sent
   end
 
   private
@@ -14,5 +15,9 @@ class Tweet < ApplicationRecord
       config.access_token        = ENV["TWITTER_API_ACCESS_TOKEN"]
       config.access_token_secret = ENV["TWITTER_API_ACCESS_TOKEN_SECRET"]
     end
+  end
+
+  def record_when_tweet_was_sent
+    update_attributes(tweeted_at: Time.now)
   end
 end
