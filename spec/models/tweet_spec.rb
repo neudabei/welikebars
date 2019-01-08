@@ -36,4 +36,20 @@ RSpec.describe Tweet, type: :model do
       end
     end
   end
+
+  describe '#send' do
+    subject { described_class.first }
+    let(:twitter_client) { double(:twitter_client) }
+
+    before do
+      Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: nil, approved: true)
+      allow(subject).to receive(:twitter_client).and_return(twitter_client)
+      allow(twitter_client).to receive(:update).with(Tweet.first.bar)
+    end
+
+    it 'sends the tweet to twitter' do
+      expect(twitter_client).to receive(:update).with(Tweet.first.bar)
+      subject.send
+    end
+  end
 end
