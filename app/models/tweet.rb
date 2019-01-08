@@ -1,8 +1,8 @@
 class Tweet < ApplicationRecord
   validates :bar, presence: true
 
-  scope :publishable, -> { where(tweeted_at: nil, approved: true) }
-  scope :published, -> { where.not(tweeted_at: nil) }
+  scope :publishable, -> { where(published_at: nil, approved: true) }
+  scope :published, -> { where.not(published_at: nil) }
 
   def publish
     twitter_client.update(bar)
@@ -10,7 +10,7 @@ class Tweet < ApplicationRecord
   end
 
   def self.last_published
-    published.order(tweeted_at: :desc).first
+    published.order(published_at: :desc).first
   end
 
   def self.next
@@ -29,6 +29,6 @@ class Tweet < ApplicationRecord
   end
 
   def record_when_tweet_was_published
-    update_attributes(tweeted_at: Time.now)
+    update_attributes(published_at: Time.now)
   end
 end

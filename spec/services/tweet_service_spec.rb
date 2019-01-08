@@ -16,7 +16,7 @@ RSpec.describe TweetService do
                      link_to_lyrics: 'https://genius.com/daking-keep-it-real',
                      link_to_song: 'https://www.youtube.com/daking',
                      approved: true, 
-                     tweeted_at: 25.hours.ago)
+                     published_at: 25.hours.ago)
 
         Tweet.create(bar: "Cause this bar is over your head \nSo you better have arms if you're gonna pull up",
                      artist: "Eminem ft Royce Da 5'9'",

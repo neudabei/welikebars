@@ -6,9 +6,9 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe 'publishable scope' do
-    let(:tweeted_at) { nil }
+    let(:published_at) { nil }
     let(:approved) { true }
-    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: tweeted_at, approved: approved) }
+    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: published_at, approved: approved) }
 
     context "when tweet is approved and hasn't been tweeted yet" do
       it 'returns the tweet' do
@@ -25,7 +25,7 @@ RSpec.describe Tweet, type: :model do
     end
 
     context "when the tweet has already been tweeted" do
-      let(:tweeted_at) { 1.day.ago }
+      let(:published_at) { 1.day.ago }
 
       it 'returns no tweets' do
         expect(Tweet.publishable).to eq([])
@@ -33,7 +33,7 @@ RSpec.describe Tweet, type: :model do
     end
 
     describe 'sorting' do
-      let!(:tweet_two) { Tweet.create(bar: 'Another bar', artist: 'Rapper', tweeted_at: tweeted_at, approved: approved, created_at: 1.day.ago) }
+      let!(:tweet_two) { Tweet.create(bar: 'Another bar', artist: 'Rapper', published_at: published_at, approved: approved, created_at: 1.day.ago) }
 
       it 'sorts tweets by id by default' do
         expect(Tweet.publishable).to eq([tweet_one, tweet_two])
@@ -42,18 +42,18 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe 'published scope' do
-    let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
-    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: nil, approved: true) }
+    let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: nil, approved: true) }
 
-    it 'returns all tweets that have a tweeted_at timestamp' do
+    it 'returns all tweets that have a published_at timestamp' do
       expect(Tweet.published).to eq([tweet_one])
     end
   end
 
   describe '.next' do
-    let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
-    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: nil, approved: true) }
-    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: nil, approved: false) }
+    let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: nil, approved: true) }
+    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: false) }
  
     it 'returns the tweet that should be tweeted next' do
       expect(Tweet.next).to eq(tweet_two) 
@@ -61,9 +61,9 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe '.last_published' do
-      let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
-      let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: 1.day.ago, approved: true) }
-      let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: 2.days.ago, approved: true) }
+      let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
+      let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: 1.day.ago, approved: true) }
+      let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: 2.days.ago, approved: true) }
 
     it 'returns the tweet which was published last' do
       expect(Tweet.last_published.id).to eq(tweet_three.id)
@@ -75,7 +75,7 @@ RSpec.describe Tweet, type: :model do
     let(:twitter_client) { double(:twitter_client) }
 
     before do
-      Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: nil, approved: true)
+      Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: true)
       allow(subject).to receive(:twitter_client).and_return(twitter_client)
       allow(twitter_client).to receive(:update).with(Tweet.first.bar)
     end
@@ -87,7 +87,7 @@ RSpec.describe Tweet, type: :model do
 
     it 'records when the tweet was published' do
       subject.publish
-      expect(subject.tweeted_at).to be_within(1.second).of Time.now
+      expect(subject.published_at).to be_within(1.second).of Time.now
     end
   end
 end

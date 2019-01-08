@@ -12,10 +12,10 @@ class TweetService
   end
 
   def time_of_last_tweet
-    Tweet.last_published.tweeted_at
+    Tweet.last_published.published_at
   end
 
   def first_tweet_ever
-    Tweet.where.not(tweeted_at: nil).empty?
+    Tweet.where.not(published_at: nil).empty?
   end
 end
