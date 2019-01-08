@@ -5,14 +5,14 @@ RSpec.describe Tweet, type: :model do
     it { should validate_presence_of :bar }
   end
 
-  describe 'tweetable scope' do
+  describe 'publishable scope' do
     let(:tweeted_at) { nil }
     let(:approved) { true }
     let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: tweeted_at, approved: approved) }
 
     context "when tweet is approved and hasn't been tweeted yet" do
       it 'returns the tweet' do
-        expect(Tweet.tweetable).to eq([Tweet.first])
+        expect(Tweet.publishable).to eq([Tweet.first])
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe Tweet, type: :model do
       let(:approved) { false }
 
       it 'returns no tweets' do
-        expect(Tweet.tweetable).to eq([])
+        expect(Tweet.publishable).to eq([])
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Tweet, type: :model do
       let(:tweeted_at) { 1.day.ago }
 
       it 'returns no tweets' do
-        expect(Tweet.tweetable).to eq([])
+        expect(Tweet.publishable).to eq([])
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Tweet, type: :model do
       let!(:tweet_two) { Tweet.create(bar: 'Another bar', artist: 'Rapper', tweeted_at: tweeted_at, approved: approved, created_at: 1.day.ago) }
 
       it 'sorts tweets by id by default' do
-        expect(Tweet.tweetable).to eq([tweet_one, tweet_two])
+        expect(Tweet.publishable).to eq([tweet_one, tweet_two])
       end
     end
   end

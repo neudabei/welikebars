@@ -1,7 +1,7 @@
 class Tweet < ApplicationRecord
   validates :bar, presence: true
 
-  scope :tweetable, -> { where(tweeted_at: nil, approved: true) }
+  scope :publishable, -> { where(tweeted_at: nil, approved: true) }
   scope :published, -> { where.not(tweeted_at: nil) }
 
   def publish
@@ -14,7 +14,7 @@ class Tweet < ApplicationRecord
   end
 
   def self.next
-    tweetable.first
+    publishable.first
   end
 
   private
