@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Tweet, type: :model do
+  describe 'validations' do
+    it { should validate_presence_of :bar }
+  end
+
   describe 'tweetable scope' do
     let(:tweeted_at) { nil }
     let(:approved) { true }

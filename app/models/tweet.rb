@@ -1,4 +1,6 @@
 class Tweet < ApplicationRecord
+  validates :bar, presence: true
+
   scope :tweetable, -> { where(tweeted_at: nil, approved: true) }
   scope :published, -> { where.not(tweeted_at: nil) }
 
