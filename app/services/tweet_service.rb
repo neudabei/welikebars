@@ -1,8 +1,8 @@
 class TweetService
   TIME_BETWEEN_TWEETS = 24.hours
 
-  def send_when_due
-    Tweet.next.send if next_tweet_due
+  def publish_when_due
+    Tweet.next.publish if next_tweet_due
   end
 
   private
@@ -12,7 +12,7 @@ class TweetService
   end
 
   def time_of_last_tweet
-    Tweet.last_sent.tweeted_at
+    Tweet.last_published.tweeted_at
   end
 
   def first_tweet_ever

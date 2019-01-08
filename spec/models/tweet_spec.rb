@@ -37,12 +37,12 @@ RSpec.describe Tweet, type: :model do
     end
   end
 
-  describe 'sent scope' do
+  describe 'published scope' do
     let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
     let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: nil, approved: true) }
 
     it 'returns all tweets that have a tweeted_at timestamp' do
-      expect(Tweet.sent).to eq([tweet_one])
+      expect(Tweet.published).to eq([tweet_one])
     end
   end
 
@@ -56,17 +56,17 @@ RSpec.describe Tweet, type: :model do
     end
   end
 
-  describe '.last_sent' do
+  describe '.last_published' do
       let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
       let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: 1.day.ago, approved: true) }
       let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: 2.days.ago, approved: true) }
 
-    it 'returns the tweet which was sent last' do
-      expect(Tweet.last_sent.id).to eq(tweet_three.id)
+    it 'returns the tweet which was published last' do
+      expect(Tweet.last_published.id).to eq(tweet_three.id)
     end
   end
 
-  describe '#send' do
+  describe '#publish' do
     subject { described_class.first }
     let(:twitter_client) { double(:twitter_client) }
 
@@ -76,13 +76,13 @@ RSpec.describe Tweet, type: :model do
       allow(twitter_client).to receive(:update).with(Tweet.first.bar)
     end
 
-    it 'sends the tweet to twitter' do
+    it 'publishs the tweet to twitter' do
       expect(twitter_client).to receive(:update).with(Tweet.first.bar)
-      subject.send
+      subject.publish
     end
 
-    it 'records when the tweet was sent' do
-      subject.send
+    it 'records when the tweet was published' do
+      subject.publish
       expect(subject.tweeted_at).to be_within(1.second).of Time.now
     end
   end

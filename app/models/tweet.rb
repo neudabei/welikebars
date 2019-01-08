@@ -1,14 +1,14 @@
 class Tweet < ApplicationRecord
   scope :tweetable, -> { where(tweeted_at: nil, approved: true) }
-  scope :sent, -> { where.not(tweeted_at: nil) }
+  scope :published, -> { where.not(tweeted_at: nil) }
 
-  def send
+  def publish
     twitter_client.update(bar)
-    record_when_tweet_was_sent
+    record_when_tweet_was_published
   end
 
-  def self.last_sent
-    sent.order(tweeted_at: :desc).first
+  def self.last_published
+    published.order(tweeted_at: :desc).first
   end
 
   def self.next
@@ -26,7 +26,7 @@ class Tweet < ApplicationRecord
     end
   end
 
-  def record_when_tweet_was_sent
+  def record_when_tweet_was_published
     update_attributes(tweeted_at: Time.now)
   end
 end
