@@ -46,6 +46,16 @@ RSpec.describe Tweet, type: :model do
     end
   end
 
+  describe '.next' do
+    let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: nil, approved: true) }
+    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', tweeted_at: nil, approved: false) }
+ 
+    it 'returns the tweet that should be tweeted next' do
+      expect(Tweet.next).to eq(tweet_two) 
+    end
+  end
+
   describe '.last_sent' do
       let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', tweeted_at: 4.hours.ago, approved: true) }
       let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', tweeted_at: 1.day.ago, approved: true) }

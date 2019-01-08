@@ -11,6 +11,10 @@ class Tweet < ApplicationRecord
     sent.order(tweeted_at: :desc).first
   end
 
+  def self.next
+    tweetable.first
+  end
+
   private
 
   def twitter_client
