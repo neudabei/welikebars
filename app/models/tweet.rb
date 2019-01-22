@@ -5,7 +5,9 @@ class Tweet < ApplicationRecord
   scope :published, -> { where.not(published_at: nil) }
 
   def publish
-    twitter_client.update(bar)
+    content = "\"#{self.bar}\"" + ' - ' + self.artist
+
+    twitter_client.update(content)
     record_when_tweet_was_published
   end
 

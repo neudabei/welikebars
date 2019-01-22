@@ -77,11 +77,11 @@ RSpec.describe Tweet, type: :model do
     before do
       Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: true)
       allow(subject).to receive(:twitter_client).and_return(twitter_client)
-      allow(twitter_client).to receive(:update).with(Tweet.first.bar)
+      allow(twitter_client).to receive(:update)
     end
 
-    it 'publishs the tweet to twitter' do
-      expect(twitter_client).to receive(:update).with(Tweet.first.bar)
+    it 'publishes the tweet to twitter' do
+      expect(twitter_client).to receive(:update).with("\"This bar is over your head\" - Rap god")
       subject.publish
     end
 
