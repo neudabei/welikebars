@@ -98,5 +98,10 @@ RSpec.describe Tweet, type: :model do
       subject.publish
       expect(subject.twitter_tweet_id).to eq(123456789012345)
     end
+
+    it 'follows up the first tweet with a second tweet containing links to song and lyrics' do
+      expect(twitter_client).to receive(:update).with("Lyrics: link_to_lyrics \nSong: link_to_song", {:in_reply_to_status_id=> twitter_response.id})
+      subject.publish
+    end
   end
 end

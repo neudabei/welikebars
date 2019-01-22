@@ -10,6 +10,8 @@ class Tweet < ApplicationRecord
     @twitter_response = twitter_client.update(content)
     record_when_tweet_was_published
     record_twitter_tweet_id
+
+    tweet_follow_up_with_more_details
   end
 
   def self.last_published
@@ -39,6 +41,11 @@ class Tweet < ApplicationRecord
 
   def record_twitter_tweet_id
     twitter_tweet_id = twitter_response.id
-    update_attributes(twitter_tweet_id: twitter_tweet_id) 
+    update_attributes(twitter_tweet_id: twitter_tweet_id)
+  end
+
+  def tweet_follow_up_with_more_details
+    follow_up_content = "Lyrics: #{self.link_to_lyrics} \nSong: #{self.link_to_song}"
+    twitter_client.update(follow_up_content, in_reply_to_status_id: twitter_response.id)
   end
 end
