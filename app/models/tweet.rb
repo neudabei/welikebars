@@ -7,8 +7,9 @@ class Tweet < ApplicationRecord
   def publish
     content = "\"#{self.bar}\"" + ' - ' + self.artist
 
-    twitter_client.update(content)
+    @twitter_response = twitter_client.update(content)
     record_when_tweet_was_published
+    record_twitter_tweet_id
   end
 
   def self.last_published
@@ -21,6 +22,8 @@ class Tweet < ApplicationRecord
 
   private
 
+  attr_reader :twitter_response
+
   def twitter_client
     @twitter_client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV["TWITTER_CONSUMER_API_KEY"]
@@ -32,5 +35,10 @@ class Tweet < ApplicationRecord
 
   def record_when_tweet_was_published
     update_attributes(published_at: Time.now)
+  end
+
+  def record_twitter_tweet_id
+    twitter_tweet_id = twitter_response.id
+    update_attributes(twitter_tweet_id: twitter_tweet_id) 
   end
 end

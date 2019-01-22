@@ -73,11 +73,13 @@ RSpec.describe Tweet, type: :model do
   describe '#publish' do
     subject { described_class.first }
     let(:twitter_client) { double(:twitter_client) }
+    let(:twitter_response) { double(:twitter_response, id: 123456789012345) }
 
     before do
       Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: true)
       allow(subject).to receive(:twitter_client).and_return(twitter_client)
       allow(twitter_client).to receive(:update)
+      allow(subject).to receive(:twitter_response).and_return(twitter_response)
     end
 
     it 'publishes the tweet to twitter' do
@@ -88,6 +90,11 @@ RSpec.describe Tweet, type: :model do
     it 'records when the tweet was published' do
       subject.publish
       expect(subject.published_at).to be_within(1.second).of Time.now
+    end
+
+    it 'records the tweet id provided by twitter after publishing' do
+      subject.publish
+      expect(subject.twitter_tweet_id).to eq(123456789012345)
     end
   end
 end
