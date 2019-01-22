@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe Tweet, type: :model do
   describe 'validations' do
     it { should validate_presence_of :bar }
+    it { should validate_presence_of :link_to_song }
+    it { should validate_presence_of :link_to_lyrics }
   end
 
   describe 'publishable scope' do
     let(:published_at) { nil }
     let(:approved) { true }
-    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: published_at, approved: approved) }
+    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: published_at, approved: approved) }
 
     context "when tweet is approved and hasn't been tweeted yet" do
       it 'returns the tweet' do
@@ -33,7 +35,7 @@ RSpec.describe Tweet, type: :model do
     end
 
     describe 'sorting' do
-      let!(:tweet_two) { Tweet.create(bar: 'Another bar', artist: 'Rapper', published_at: published_at, approved: approved, created_at: 1.day.ago) }
+      let!(:tweet_two) { Tweet.create(bar: 'Another bar', artist: 'Rapper', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: published_at, approved: approved, created_at: 1.day.ago) }
 
       it 'sorts tweets by id by default' do
         expect(Tweet.publishable).to eq([tweet_one, tweet_two])
@@ -42,8 +44,8 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe 'published scope' do
-    let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
-    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: nil, approved: true) }
+    let!(:tweet_one) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: nil, approved: true) }
 
     it 'returns all tweets that have a published_at timestamp' do
       expect(Tweet.published).to eq([tweet_one])
@@ -51,9 +53,9 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe '.next' do
-    let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
-    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: nil, approved: true) }
-    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: false) }
+    let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: 4.hours.ago, approved: true) }
+    let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: nil, approved: true) }
+    let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: nil, approved: false) }
  
     it 'returns the tweet that should be tweeted next' do
       expect(Tweet.next).to eq(tweet_two) 
@@ -61,9 +63,9 @@ RSpec.describe Tweet, type: :model do
   end
 
   describe '.last_published' do
-      let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', published_at: 4.hours.ago, approved: true) }
-      let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', published_at: 1.day.ago, approved: true) }
-      let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: 2.days.ago, approved: true) }
+      let!(:tweet_three) { Tweet.create(bar: 'I think like the man behind the register', artist: 'Wu-Tang-Clan', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: 4.hours.ago, approved: true) }
+      let!(:tweet_two) { Tweet.create(bar: 'Another day another dollar', artist: 'Raekwon', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: 1.day.ago, approved: true) }
+      let!(:tweet_one) { Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: 2.days.ago, approved: true) }
 
     it 'returns the tweet which was published last' do
       expect(Tweet.last_published.id).to eq(tweet_three.id)
@@ -76,7 +78,7 @@ RSpec.describe Tweet, type: :model do
     let(:twitter_response) { double(:twitter_response, id: 123456789012345) }
 
     before do
-      Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', published_at: nil, approved: true)
+      Tweet.create(bar: 'This bar is over your head', artist: 'Rap god', link_to_song: 'link_to_song', link_to_lyrics: 'link_to_lyrics', published_at: nil, approved: true)
       allow(subject).to receive(:twitter_client).and_return(twitter_client)
       allow(twitter_client).to receive(:update)
       allow(subject).to receive(:twitter_response).and_return(twitter_response)

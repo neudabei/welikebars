@@ -1,5 +1,5 @@
 class Tweet < ApplicationRecord
-  validates :bar, presence: true
+  validates :bar, :link_to_song, :link_to_lyrics, presence: true
 
   scope :publishable, -> { where(published_at: nil, approved: true) }
   scope :published, -> { where.not(published_at: nil) }
