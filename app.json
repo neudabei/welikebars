@@ -1,0 +1,11 @@
+{
+  "name": "welikebars",
+  "description": "Posting rap bars to Twitter",
+  "keywords": [
+  ],
+  "scripts": {
+    "dokku": {
+      "postdeploy": "bundle exec rails db:migrate"
+    }
+  }
+}
