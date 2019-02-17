@@ -16,7 +16,7 @@ SHELL=/bin/bash
 ### PLACE ALL CRON TASKS BELOW
 
 # Run tweet service
-*/5 * * * * /bin/bash -c 'dokku --rm-container run welikebars bundle exec rake twitter:publish_when_due'
+*/5 * * * * /bin/bash -c 'dokku --rm-container run welikebars bundle exec rake twitter:publish_when_due' >> /home/robert/welikebars_cron.log
 
 ### PLACE ALL CRON TASKS ABOVE, DO NOT REMOVE THE WHITESPACE AFTER THIS LINE
 
