@@ -51,5 +51,16 @@ RSpec.describe TweetService do
         expect(subject.publish_when_due).to eq(nil)
       end
     end
+
+    context 'when no tweets are available for publishing' do
+      before do
+        allow(Tweet).to receive(:next).and_return(nil)
+      end
+
+      it 'does not publish a tweet' do
+        expect(nil).not_to receive(:publish)
+        subject.publish_when_due
+      end
+    end
   end
 end
